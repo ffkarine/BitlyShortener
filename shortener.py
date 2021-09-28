@@ -2,15 +2,7 @@ import requests
 import time
 
 # Authentication tokens
-def authentication(user):
-    if (not user):
-        # Authentication tokens for the first 1000 URLs 
-        access_token = ""
-
-    else:
-        # Authentication tokens for the remaining URLs (up to 1000)
-        access_token = ""
- 
+def authentication(access_token):
     headers = {'Authorization': f"Bearer {access_token}",
                 'Content-Type': 'application/json',
             }
@@ -57,23 +49,20 @@ def shortenUrl(lUrl, headers):
 
 # ---> Use double '\'s on the path <---
 # path to the file containing the URLs to be shortened
-path = ""
+path = "path\\to\\file.csv"
 idsList, longUrlsList = openFile(path)
 failedUrlsIds = []
 shortUrlsList = []
-header = authentication(0)
+
+header = authentication(" [YOUR ACCESS TOKEN GENERATED ON BITLY WEBSITE] ") 
+
 for i in range(len(longUrlsList)):  
     if(i < 999): # The Bitly API (free version) has a limit of 1000 requests per user per month
         url = shortenUrl(longUrlsList[i], header)
+
         if url == "AN_ERROR_OCURRED":
             failedUrlsIds.append(idsList[i])
-        shortUrlsList.append(url)
-        time.sleep(0.7) # the Bitly API has a limit of 100 requests per minute
-    else: # When the Bitly's month limit is reached, switches the authentication token
-        header = authentication(1)
-        url = shortenUrl(longUrlsList[i], header)
-        if url == "AN_ERROR_OCURRED":
-            failedUrlsIds.append(idsList[i])
+
         shortUrlsList.append(url)
         time.sleep(0.7) # the Bitly API has a limit of 100 requests per minute
 
@@ -84,6 +73,3 @@ writeFile(path, idsList, longUrlsList, shortUrlsList)
 # if len(failedUrlsIds) != 0:
 #     for i in range(len(failedUrlsIds)):
 #         print(failedUrlsIds[i])
-    
-
-
