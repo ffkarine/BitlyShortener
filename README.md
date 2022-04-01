@@ -1,4 +1,4 @@
-# Bitly Shortener
+# Bitly URL Shortener
 
 This script uses the Bitly API to shorten up to 1000 URLs (monthly limit defined by Bitly) <br>
 It expects a csv file containing a column of IDs and a column of URLs to be shortened. <br>
